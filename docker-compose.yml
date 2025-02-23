@@ -1,0 +1,28 @@
+services:
+  # Aplicação PicPay
+  app:
+    build: .
+    networks:
+      - picpay_network
+    depends_on:
+      - db
+    env_file:
+      - .env
+
+  # Banco de dados PostgreSQL
+  db:
+    image: postgres:latest
+    env_file:
+      - .env
+    networks:
+      - picpay_network
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+# Configurações de rede e volumes
+networks:
+  picpay_network:
+    driver: bridge
+
+volumes:
+  postgres_data: 
