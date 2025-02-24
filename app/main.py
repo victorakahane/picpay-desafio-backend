@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException, Depends
 from sqlalchemy.orm import Session
-from app.schemas.user import UserCreate
+from app.schemas.user import UserCreate, UserResponse
 from app.database import get_db, Base, engine, create_tables
 from app.services.user_service import UserService
 from contextlib import asynccontextmanager
@@ -13,7 +13,7 @@ create_tables()
 def read_root():
     return {"message": "Bem-vindo ao PicPay Simplificado!"}
 
-@app.post("/users/", response_model=UserCreate)
+@app.post("/users/", response_model=UserResponse)
 async def create_user(user: UserCreate, db: Session = Depends(get_db)):
     user_service = UserService(db)
     try:

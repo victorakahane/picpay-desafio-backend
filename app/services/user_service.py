@@ -1,4 +1,4 @@
-# app/services/user_service.py
+from app.core.security import generate_password_hash
 from app.repositories.user_repository import UserRepository
 from app.schemas.user import UserCreate, UserUpdate
 from sqlalchemy.orm import Session
@@ -26,6 +26,8 @@ class UserService:
         if self.get_user_by_email(user_data.email):
             raise ValueError('User already exists with this e-mail.')
 
+        user_data.password = generate_password_hash(user_data.password)
+        
         return self.user_repository.create_user(user_data)
 
     def update_user(self, user_id: int, user_data: UserUpdate) -> User:

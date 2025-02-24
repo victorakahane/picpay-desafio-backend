@@ -47,3 +47,13 @@ class UserUpdate(UserBase):
     email: Optional[str] = None
     password: Optional[str] = None
     user_type: Optional[str] = None
+
+class UserResponse(BaseModel):
+    id: int
+    full_name: str
+    document: str
+    email: EmailStr
+    user_type: UserType
+    
+    class Config:
+        from_attributes = True
