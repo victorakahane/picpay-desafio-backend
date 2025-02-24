@@ -1,5 +1,5 @@
 from app.models.user import UserType
-from pydantic import BaseModel, EmailStr, model_validator, field_validator
+from pydantic import BaseModel, EmailStr, model_validator, ConfigDict
 from typing import Optional
 from validate_docbr import CPF, CNPJ
 import re
@@ -35,8 +35,9 @@ class UserBase(BaseModel):
         # Se a validação falhar, lança um erro
         raise ValueError('Invalid document. Provide a valid CPF or CNPJ.')
     
-    class Config:
-        use_enum_values = True
+    model_config: ConfigDict = {
+        'use_enum_values': True
+    }
 
 class UserCreate(UserBase):
     pass
@@ -54,6 +55,7 @@ class UserResponse(BaseModel):
     document: str
     email: EmailStr
     user_type: UserType
-    
-    class Config:
-        from_attributes = True
+
+    model_config: ConfigDict = {
+        'from_attributes': True
+    }
