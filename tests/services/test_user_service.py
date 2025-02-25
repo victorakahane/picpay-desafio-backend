@@ -1,21 +1,20 @@
 import pytest
-from validate_docbr import CPF, CNPJ
+from validate_docbr import CPF
+from unittest.mock import MagicMock, patch
 from unittest.mock import MagicMock
 from app.services.user_service import UserService
 from app.schemas.user import UserCreate, UserType
 from app.models.user import User
-from unittest.mock import MagicMock, patch
+from app.repositories.user_repository import UserRepository
 from app.schemas.user import UserCreate, UserType
 
 @pytest.fixture
-def mock_db():
-    return MagicMock()
+def mock_user_repository():
+    return MagicMock(spec=UserRepository, autospec=True)
 
 @pytest.fixture
-def mock_user_service(mock_db):
-    mock_user_service = UserService(mock_db)
-    mock_user_service.user_repository = MagicMock()
-    return mock_user_service
+def mock_user_service(mock_user_repository):
+    return UserService(mock_user_repository)
 
 def test_create_user_success(mock_user_service):
     user_data = UserCreate(
