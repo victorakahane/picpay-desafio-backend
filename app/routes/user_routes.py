@@ -4,6 +4,7 @@ from app.schemas.user import UserCreate, UserResponse
 from app.services.user_service import UserService
 from app.database import get_db
 from app.dependencies import get_user_service
+from app.exceptions import UserAlreadyExistsException, UserCreationException
 
 router = APIRouter()
 
@@ -11,5 +12,7 @@ router = APIRouter()
 async def create_user(user: UserCreate, user_service: UserService = Depends(get_user_service)):
     try:
         return user_service.create_user(user)
-    except ValueError as e:
+    except UserAlreadyExistsException as e:
         raise HTTPException(status_code=400, detail=str(e))
+    except UserCreationException as e:
+        raise HTTPException(status_code=500, detail=str(e))
